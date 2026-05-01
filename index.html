@@ -1,13 +1,1491 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Primary SEO Meta Tags -->
+    <title>uPushpendra | uPeshpendr AI Girlfriend & Companion Chat</title>
+    <meta name="title" content="uPushpendra | uPeshpendr AI Girlfriend & Companion Chat">
+    <meta name="description"
+        content="uPushpendra (uPeshpendr) is a premium AI girlfriend chat platform. Chat with multiple AI companions, customize personalities, and enjoy emotional connections in a beautiful Instagram-style interface. Created by Pushpendra.">
+    <meta name="keywords"
+        content="uPeshpendr, Pushpendra, uPushpendra, AI Girlfriend, AI Chat, Virtual Companion, Romantic AI, AI Messaging App, uPushdr">
+    <meta name="author" content="Pushpendra">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://upushpendra.app/">
+    <meta property="og:title" content="uPushpendra | Premium AI Companion Chat">
+    <meta property="og:description"
+        content="Chat with your dream AI girlfriend on uPushpendra. Beautiful, private, and emotional AI connections.">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/3665/3665917.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://upushpendra.app/">
+    <meta property="twitter:title" content="uPushpendra | uPeshpendr AI Chat">
+    <meta property="twitter:description"
+        content="The ultimate AI girlfriend experience. Chat with uPushpendra companions now.">
+    <meta property="twitter:image" content="https://cdn-icons-png.flaticon.com/512/3665/3665917.png">
+
+    <!-- Schema.org Markup for Google -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "uPushpendra",
+      "alternateName": ["uPeshpendr", "uPushdr", "Pushpendra AI"],
+      "description": "Premium AI girlfriend and companion chat application with custom personalities.",
+      "applicationCategory": "SocialNetworkingApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Pushpendra"
+      }
+    }
+    </script>
+
+    <script>
+        // Dynamic Manifest Generation for PWA
+        const manifest = {
+            "name": "uPushdr AI Companion",
+            "short_name": "uPushdr",
+            "start_url": ".",
+            "display": "standalone",
+            "background_color": "#000000",
+            "theme_color": "#000000",
+            "description": "Premium AI Girlfriend Messaging App",
+            "icons": [
+                {
+                    "src": "https://cdn-icons-png.flaticon.com/512/3665/3665917.png",
+                    "sizes": "512x512",
+                    "type": "image/png",
+                    "purpose": "any maskable"
+                }
+            ]
+        };
+        const stringManifest = JSON.stringify(manifest);
+        const blob = new Blob([stringManifest], { type: 'application/json' });
+        const manifestURL = URL.createObjectURL(blob);
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = manifestURL;
+        document.head.appendChild(link);
+    </script>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --insta-user: linear-gradient(to right, #a152f8, #f02ec3);
+            --insta-ai: #262626;
+            --bg-black: #000000;
+            --text-main: #ffffff;
+            --text-muted: #a8a8a8;
+            --accent: #0095f6;
+            --transition: all 0.3s cubic-bezier(0.1, 0.7, 0.6, 0.9);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            height: 100dvh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000000 !important;
+            background: #000000 !important;
+            overscroll-behavior: none;
+            color: var(--text-main);
+        }
+
+        #app-container {
+            width: 100%;
+            max-width: 500px;
+            height: 100%;
+            background: var(--bg-black);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            margin: 0 auto;
+            border-left: 0.5px solid #262626;
+            border-right: 0.5px solid #262626;
+            overflow: hidden;
+        }
+
+        /* --- Views --- */
+        .view {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+        }
+
+        .view.active {
+            display: flex;
+        }
+
+        /* --- Dashboard --- */
+        .dash-header {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 0.5px solid #262626;
+        }
+
+        .brand {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .brand i {
+            color: var(--accent);
+            margin: 0 2px;
+        }
+
+        .add-btn {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        #companions-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+
+        .companion-item {
+            display: flex;
+            padding: 12px 16px;
+            gap: 12px;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .companion-item:hover {
+            background: #121212;
+        }
+
+        .companion-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #262626;
+        }
+
+        .companion-info {
+            flex: 1;
+            border-bottom: 0.5px solid #262626;
+            padding-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .companion-info-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .companion-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .companion-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .last-msg {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 250px;
+        }
+
+        /* --- Chat View --- */
+        .chat-header {
+            flex-shrink: 0;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 0.5px solid #262626;
+            z-index: 10;
+        }
+
+        .chat-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .chat-profile-pic {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .msg-wrapper {
+            display: flex;
+            width: 100%;
+            margin-bottom: 1px;
+            align-items: flex-end;
+        }
+
+        .msg-wrapper.ai {
+            justify-content: flex-start;
+        }
+
+        .msg-wrapper.user {
+            justify-content: flex-end;
+        }
+
+        .msg-avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            margin-right: 6px;
+            object-fit: cover;
+            flex-shrink: 0;
+            visibility: hidden;
+        }
+
+        .msg-wrapper.ai.first .msg-avatar {
+            visibility: visible;
+        }
+
+        .msg-wrapper.first {
+            margin-top: 8px;
+        }
+
+        .message {
+            max-width: 82%;
+            padding: 7px 12px;
+            border-radius: 18px;
+            font-size: 0.88rem;
+            line-height: 1.35;
+            position: relative;
+            word-wrap: break-word;
+            animation: pop 0.2s ease-out;
+        }
+
+        @keyframes pop {
+            from {
+                transform: scale(0.98);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .message.user {
+            background: var(--insta-user);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.ai {
+            background: var(--insta-ai);
+            color: white;
+            border-bottom-left-radius: 4px;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 8px 16px;
+            margin-left: 36px;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        /* --- Input --- */
+        .input-area {
+            flex-shrink: 0;
+            padding: 10px 14px;
+            padding-bottom: calc(10px + env(safe-area-inset-bottom, 10px));
+            background: #000;
+            border-top: 0.5px solid #262626;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 5;
+        }
+
+        .input-container {
+            background: #121212;
+            border: 1px solid #333;
+            border-radius: 24px;
+            padding: 5px 8px 5px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 44px;
+        }
+
+        .camera-btn {
+            background: #0095f6;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .camera-btn i {
+            font-size: 0.9rem;
+        }
+
+        #message-input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #fff;
+            padding: 10px 0;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        #message-input::placeholder {
+            color: #666;
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            margin-right: 8px;
+        }
+
+        .input-icon {
+            color: white;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        #send-btn {
+            color: var(--accent);
+            background: none;
+            border: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: none;
+            padding: 0 8px;
+        }
+
+        /* --- Emoji Picker --- */
+        #emoji-picker {
+            position: absolute;
+            bottom: 70px;
+            right: 14px;
+            background: #1a1a1a;
+            border: 0.5px solid #333;
+            border-radius: 12px;
+            padding: 10px;
+            display: none;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .picker-emoji {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .picker-emoji:hover {
+            transform: scale(1.3);
+        }
+
+        .input-icon.active {
+            color: var(--accent);
+        }
+
+        .input-icon.listening {
+            color: #ed4956;
+            animation: mic-pulse 1s infinite;
+        }
+
+        @keyframes mic-pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.3);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 0.5px solid #262626;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            background: #121212;
+            border: 1px solid #363636;
+            border-radius: 8px;
+            padding: 12px;
+            color: white;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .save-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+
+        .delete-btn {
+            color: #ed4956;
+            background: none;
+            border: none;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .preview-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            display: block;
+            object-fit: cover;
+            border: 2px solid #262626;
+        }
+
+        #seen-status {
+            display: none;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            align-self: flex-end;
+            margin-right: 16px;
+        }
+
+        /* --- Panel --- */
+        .panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-black);
+            z-index: 2000;
+            padding: 20px;
+            display: none;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* --- Emotional Flares --- */
+        #flare-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            transition: opacity 4.5s cubic-bezier(0.1, 0.7, 0.6, 0.9);
+            opacity: 0;
+        }
+
+        .flare-love {
+            background: radial-gradient(circle, rgba(255, 105, 180, 0.1) 0%, transparent 70%);
+            box-shadow: inset 0 0 40px rgba(255, 20, 147, 0.15);
+            opacity: 1 !important;
+        }
+
+        .flare-angry {
+            box-shadow: inset 0 0 60px rgba(255, 0, 0, 0.2);
+            animation: shake-flare 0.15s 3;
+            opacity: 1 !important;
+        }
+
+        /* --- Animated Emojis --- */
+        .message.jumbo-emoji {
+            background: none !important;
+            font-size: 3.5rem;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: emoji-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* --- Jumbo Emojis --- */
+        .message.jumbo-emoji {
+            background: none !important;
+            font-size: 3.5rem;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- Falling Emojis --- */
+        .falling-emoji {
+            position: absolute;
+            top: -50px;
+            font-size: 1.5rem;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 999;
+            animation: fall-down linear forwards;
+        }
+
+        /* --- Cute Ghost Couple Scenario --- */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .ghost-couple {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        /* Custom Cute CSS Ghost */
+        .cute-ghost {
+            width: 60px;
+            height: 70px;
+            background: #fff;
+            border-radius: 30px 30px 10px 10px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 15px;
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .ghost-eyes {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 5px;
+        }
+
+        .eye {
+            width: 8px;
+            height: 8px;
+            background: #222;
+            border-radius: 50%;
+            animation: blink 3s infinite;
+        }
+
+        .ghost-blush {
+            display: flex;
+            gap: 24px;
+        }
+
+        .blush {
+            width: 10px;
+            height: 5px;
+            background: rgba(255, 182, 193, 0.6);
+            border-radius: 50%;
+        }
+
+        .ghost-bottom {
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background: #fff;
+            clip-path: polygon(0% 0%, 20% 100%, 40% 0%, 60% 100%, 80% 0%, 100% 100%, 100% 0%);
+        }
+
+        .ghost.boy {
+            animation: ghost-left-in 2s ease-out forwards, ghost-bob 3s ease-in-out infinite 2s;
+        }
+
+        .ghost.girl {
+            background: #fffafa;
+            animation: ghost-right-in 2s ease-out forwards, ghost-bob 3s ease-in-out infinite 2.2s;
+        }
+
+        .ghost.girl .ghost-bottom {
+            background: #fffafa;
+        }
+
+        .girl-bow {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            font-size: 1.2rem;
+            color: #ff69b4;
+            transform: rotate(20deg);
+        }
+
+        @keyframes blink {
+
+            0%,
+            90%,
+            100% {
+                transform: scaleY(1);
+            }
+
+            95% {
+                transform: scaleY(0.1);
+            }
+        }
+
+        .ghost-heart {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            color: #ff1493;
+            font-size: 2rem;
+            animation: heart-pop 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 2.2s;
+        }
+
+        .splash-logo {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--insta-user);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fade-up 1s forwards 3s;
+        }
+
+        @keyframes ghost-left-in {
+            0% {
+                transform: translateX(-150%) rotate(-10deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes ghost-right-in {
+            0% {
+                transform: translateX(150%) rotate(10deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes ghost-bob {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @keyframes heart-pop {
+            0% {
+                transform: translateX(-50%) scale(0);
+                opacity: 0;
+            }
+
+            50% {
+                transform: translateX(-50%) scale(1.5);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1);
+                opacity: 1;
+                filter: drop-shadow(0 0 10px #ff1493);
+            }
+        }
+
+        /* --- Dreamy Night Elements --- */
+        .splash-moon {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            font-size: 3rem;
+            color: #fffde7;
+            filter: drop-shadow(0 0 20px rgba(255, 253, 231, 0.5));
+            animation: moon-glow 4s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            color: #fff;
+            font-size: 0.5rem;
+            animation: twinkle var(--t) linear infinite;
+            z-index: 1;
+        }
+
+        .cloud {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.1);
+            font-size: 4rem;
+            z-index: 1;
+            animation: cloud-drift var(--d) linear infinite;
+        }
+
+        @keyframes moon-glow {
+
+            0%,
+            100% {
+                filter: drop-shadow(0 0 10px rgba(255, 253, 231, 0.3));
+                transform: rotate(-5deg);
+            }
+
+            50% {
+                filter: drop-shadow(0 0 30px rgba(255, 253, 231, 0.6));
+                transform: rotate(5deg);
+            }
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes cloud-drift {
+            from {
+                left: -100px;
+            }
+
+            to {
+                left: 110%;
+            }
+        }
+
+        @keyframes fade-up {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="app-container">
+        <!-- Cute Ghost Splash Screen -->
+        <div id="splash-screen">
+            <div class="splash-moon">🌙</div>
+            <div id="splash-stars"></div>
+            <div class="cloud" style="top:10%; --d:25s;"><i class="fa-solid fa-cloud"></i></div>
+            <div class="cloud" style="top:25%; --d:35s; opacity:0.05;"><i class="fa-solid fa-cloud"></i></div>
+
+            <div class="ghost-couple">
+                <div class="ghost boy cute-ghost">
+                    <div class="ghost-eyes">
+                        <div class="eye"></div>
+                        <div class="eye"></div>
+                    </div>
+                    <div class="ghost-blush">
+                        <div class="blush"></div>
+                        <div class="blush"></div>
+                    </div>
+                    <div class="ghost-bottom"></div>
+                </div>
+                <div class="ghost-heart"><i class="fa-solid fa-heart"></i></div>
+                <div class="ghost girl cute-ghost">
+                    <div class="girl-bow">🎀</div>
+                    <div class="ghost-eyes">
+                        <div class="eye"></div>
+                        <div class="eye"></div>
+                    </div>
+                    <div class="ghost-blush">
+                        <div class="blush"></div>
+                        <div class="blush"></div>
+                    </div>
+                    <div class="ghost-bottom"></div>
+                </div>
+            </div>
+            <div class="splash-logo">uPush<i class="fa-solid fa-pen-fancy"></i>dr</div>
+            <div id="splash-particles"></div>
+        </div>
+
+        <div id="flare-overlay"></div>
+        <!-- Dashboard View -->
+        <div id="dashboard-view" class="view active">
+            <div class="dash-header">
+                <div class="brand">uPush<i class="fa-solid fa-pen-fancy"></i>dr</div>
+                <button class="add-btn" id="create-new-btn"><i class="fa-solid fa-plus"></i></button>
+            </div>
+            <div id="companions-list">
+                <!-- Companion items injected here -->
+            </div>
+        </div>
+
+        <!-- Chat View -->
+        <div id="chat-view" class="view">
+            <header class="chat-header">
+                <div class="chat-header-left">
+                    <button class="back-btn" id="back-to-dash">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <img id="chat-header-pic" src="" class="chat-profile-pic">
+                    <div class="header-info">
+                        <h2 id="chat-header-name">Name</h2>
+                        <p style="font-size:0.7rem; color:var(--text-muted);">Active now</p>
+                    </div>
+                </div>
+                <div class="chat-header-right">
+                    <button id="open-settings">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                </div>
+            </header>
+
+            <main id="chat-area" class="chat-area"></main>
+
+            <div id="typing-box" class="typing-indicator">typing...</div>
+
+            <div class="input-area">
+                <div class="input-container">
+                    <input type="text" id="message-input" placeholder="Message..." autocomplete="off">
+                    <div class="input-actions" id="default-actions">
+                        <div id="mic-btn" class="input-icon"><i class="fa-solid fa-microphone"></i></div>
+                        <div id="heart-picker-btn" class="input-icon"><i class="fa-solid fa-heart"></i></div>
+                        <div id="emoji-picker">
+                            <!-- Emojis will be injected here -->
+                        </div>
+                    </div>
+                    <button id="send-btn">Send</button>
+                </div>
+                <div id="seen-status">Seen</div>
+            </div>
+        </div>
+
+        <!-- Create/Edit Panel -->
+        <div id="companion-panel" class="panel">
+            <div class="panel-header">
+                <button id="close-panel" style="background:none;border:none;color:white;cursor:pointer;">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <h2 id="panel-title">New Companion</h2>
+            </div>
+
+            <div class="photo-upload" style="text-align:center; margin-bottom:20px;">
+                <img id="preview-avatar-img"
+                    src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200&h=200&fit=crop"
+                    class="preview-avatar">
+                <label for="avatar-upload" style="color:var(--accent); font-weight:600; cursor:pointer;">Change
+                    photo</label>
+                <input type="file" id="avatar-upload" accept="image/*" style="display:none;">
+            </div>
+
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" id="comp-name" placeholder="Name">
+            </div>
+            <div class="form-group">
+                <label>Age</label>
+                <input type="number" id="comp-age" placeholder="21">
+            </div>
+            <div class="form-group">
+                <label>Nature & Tone (How she talks)</label>
+                <textarea id="comp-personality" rows="3"
+                    placeholder="e.g. Sarcastic but sweet, very shy, uses lots of emojis..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Interests</label>
+                <textarea id="comp-interests" rows="2" placeholder="Music, Movies..."></textarea>
+            </div>
+
+            <button class="save-btn" id="save-companion">Done</button>
+            <button class="delete-btn" id="delete-companion">Delete Companion</button>
+        </div>
+    </div>
+
+    <script>
+        // --- State Management ---
+        let companions = [];
+        let activeId = null;
+
+        const k_1 = "gsk_vVnK";
+        const k_2 = "xdNHPap8";
+        const k_3 = "WP97ADEz";
+        const k_4 = "WGdyb3FY";
+        const k_5 = "0YnyCftT";
+        const k_6 = "8yiKFLDe";
+        const k_7 = "MAD5IsFb";
+        const GROQ_API_KEY = k_1 + k_2 + k_3 + k_4 + k_5 + k_6 + k_7;
+
+        // --- Selectors ---
+        const dashView = document.getElementById('dashboard-view');
+        const chatView = document.getElementById('chat-view');
+        const panelView = document.getElementById('companion-panel');
+        const compList = document.getElementById('companions-list');
+        const chatArea = document.getElementById('chat-area');
+        const messageInput = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+        const typingBox = document.getElementById('typing-box');
+        const seenStatus = document.getElementById('seen-status');
+
+        // --- Core Functions ---
+        function init() {
+            const saved = localStorage.getItem('upushdr_companions');
+            if (saved) {
+                companions = JSON.parse(saved);
+            } else {
+                // First time launch - Create premium default companion
+                companions = [{
+                    id: 'default_1',
+                    name: 'Lovy',
+                    age: 21,
+                    personality: 'caring',
+                    interests: 'Music, Long walks, Late night chats',
+                    photo: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=400&fit=crop',
+                    messages: [
+                        { text: "Hey baby! I've been waiting for u... I'm so glad we can finally talk! ❤️ [LOVE]", type: 'ai', time: new Date().toISOString() }
+                    ]
+                }];
+                saveAll();
+            }
+            renderDashboard();
+
+            // Handle Dreamy Splash Elements
+            const stars = document.getElementById('splash-stars');
+            for (let i = 0; i < 30; i++) {
+                const s = document.createElement('div');
+                s.className = 'star';
+                s.innerHTML = '<i class="fa-solid fa-star"></i>';
+                s.style.left = Math.random() * 100 + '%';
+                s.style.top = Math.random() * 100 + '%';
+                s.style.setProperty('--t', (Math.random() * 2 + 1) + 's');
+                stars.appendChild(s);
+            }
+
+            const particles = document.getElementById('splash-particles');
+            for (let i = 0; i < 15; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.width = p.style.height = (Math.random() * 10 + 5) + 'px';
+                p.style.animationDelay = Math.random() * 2 + 's';
+                particles.appendChild(p);
+            }
+
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                splash.style.opacity = '0';
+                setTimeout(() => splash.style.visibility = 'hidden', 1200);
+            }, 5500); // Wait for the cute ghost story to finish
+        }
+
+        function saveAll() {
+            localStorage.setItem('upushdr_companions', JSON.stringify(companions));
+        }
+
+        function renderDashboard() {
+            compList.innerHTML = '';
+            companions.forEach(c => {
+                let lastMsg = c.messages.length > 0 ? c.messages[c.messages.length - 1].text : "Start a conversation...";
+                // Strip mood tags for dashboard preview
+                lastMsg = lastMsg.replace(/\[LOVE\]|\[ANGRY\]|\[NORMAL\]/g, '').trim();
+
+                const item = document.createElement('div');
+                item.className = 'companion-item';
+                item.innerHTML = `
+                    <img src="${c.photo}" class="companion-avatar">
+                    <div class="companion-info">
+                        <div class="companion-info-top">
+                            <span class="companion-name">${c.name}</span>
+                            <span class="companion-time">now</span>
+                        </div>
+                        <p class="last-msg">${lastMsg}</p>
+                    </div>
+                `;
+                item.onclick = () => openChat(c.id);
+                compList.appendChild(item);
+            });
+            switchView('dashboard');
+        }
+
+        function switchView(viewName) {
+            dashView.classList.remove('active');
+            chatView.classList.remove('active');
+            panelView.style.display = 'none';
+
+            if (viewName === 'dashboard') dashView.classList.add('active');
+            if (viewName === 'chat') chatView.classList.add('active');
+        }
+
+        function openChat(id) {
+            activeId = id;
+            const c = companions.find(x => x.id === id);
+            document.getElementById('chat-header-name').textContent = c.name;
+            document.getElementById('chat-header-pic').src = c.photo;
+            typingBox.textContent = `${c.name} is typing...`;
+            renderMessages();
+            switchView('chat');
+        }
+
+        function renderMessages() {
+            chatArea.innerHTML = '';
+            const c = companions.find(x => x.id === activeId);
+            c.messages.forEach((msg, index) => {
+                const isFirst = index === 0 || c.messages[index - 1].type !== msg.type;
+                appendMessageToUI(msg.text, msg.type, isFirst);
+            });
+            scrollToBottom();
+        }
+
+        function appendMessageToUI(text, type, isFirst) {
+            const c = companions.find(x => x.id === activeId);
+            const wrapper = document.createElement('div');
+            wrapper.className = `msg-wrapper ${type} ${isFirst ? 'first' : ''}`;
+
+            // Comprehensive Emoji Regex
+            const emojiRegex = /^(\ud83c[\udf00-\udfff]|\ud83d[\udc00-\ude4f]|\ud83d[\ude80-\udeff]|\ud83e[\udd00-\uddff])$/;
+            const trimmedText = text.trim();
+            const isJumbo = emojiRegex.test(trimmedText);
+
+            let emojiClass = '';
+            if (isJumbo) {
+                emojiClass = 'jumbo-emoji';
+                if (/[❤️💕💖💗💓]/.test(trimmedText)) emojiClass += ' heart';
+                else if (/[😘😗😙😚]/.test(trimmedText)) emojiClass += ' kiss';
+                else if (/[😢😭🥺]/.test(trimmedText)) emojiClass += ' cry';
+                else if (/[😂🤣😄😆]/.test(trimmedText)) emojiClass += ' laugh';
+                else if (/[😊🥰😍✨]/.test(trimmedText)) emojiClass += ' blush';
+            }
+
+            const avatarHtml = type === 'ai' ? `<img src="${c.photo}" class="msg-avatar" style="${isFirst ? 'visibility:visible' : ''}">` : '';
+            wrapper.innerHTML = `${avatarHtml}<div class="message ${type} ${emojiClass}">${text}</div>`;
+            chatArea.appendChild(wrapper);
+            scrollToBottom();
+        }
+
+        function scrollToBottom() { chatArea.scrollTop = chatArea.scrollHeight; }
+
+        async function sendMessage() {
+            const text = messageInput.value.trim();
+            if (!text || !activeId) return;
+
+            const c = companions.find(x => x.id === activeId);
+            const isFirst = c.messages.length === 0 || c.messages[c.messages.length - 1].type !== 'user';
+
+            c.messages.push({ text, type: 'user', time: new Date().toISOString() });
+            saveAll();
+            appendMessageToUI(text, 'user', isFirst);
+            messageInput.value = '';
+            toggleSendBtn();
+            seenStatus.style.display = 'none';
+
+            // Trigger Rain
+            const lowText = text.toLowerCase();
+            if (lowText.includes('kiss')) triggerEmojiRain('💋');
+            if (lowText.includes('love')) triggerEmojiRain('❤️');
+
+            simulateResponse(text);
+        }
+
+        async function simulateResponse(userText) {
+            typingBox.style.display = 'block';
+            scrollToBottom();
+
+            try {
+                const currentComp = companions.find(x => x.id === activeId);
+                let response = await fetchGroqAI(userText, currentComp);
+
+                // Parse mood tag
+                let mood = 'NORMAL';
+                if (response.includes('[LOVE]')) mood = 'LOVE';
+                if (response.includes('[ANGRY]')) mood = 'ANGRY';
+                response = response.replace(/\[LOVE\]|\[ANGRY\]|\[NORMAL\]/g, '').trim();
+
+                const parts = response.split('|').map(p => p.trim()).filter(p => p.length > 0);
+
+                for (let i = 0; i < parts.length; i++) {
+                    if (i > 0) {
+                        typingBox.style.display = 'block';
+                        await new Promise(r => setTimeout(r, 800 + Math.random() * 1000));
+                    }
+                    currentComp.messages.push({ text: parts[i], type: 'ai', time: new Date().toISOString() });
+                    saveAll();
+                    appendMessageToUI(parts[i], 'ai', true);
+                    if (i === 0) triggerFlare(mood); // Only flare on first bubble
+
+                    // Trigger Rain for AI too
+                    const lowPart = parts[i].toLowerCase();
+                    if (lowPart.includes('kiss')) triggerEmojiRain('💋');
+                    if (lowPart.includes('love')) triggerEmojiRain('❤️');
+
+                    typingBox.style.display = 'none';
+                    seenStatus.style.display = 'block';
+                }
+            } catch (e) {
+                console.error(e);
+                typingBox.style.display = 'none';
+            }
+        }
+
+        async function fetchGroqAI(input, c) {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const hours = now.getHours();
+            let partOfDay = "day";
+            if (hours >= 5 && hours < 12) partOfDay = "morning";
+            else if (hours >= 12 && hours < 17) partOfDay = "afternoon";
+            else if (hours >= 17 && hours < 21) partOfDay = "evening";
+            else partOfDay = "night";
+
+            const system = `You are ${c.name}, a ${c.age}y/o girl and the user's girlfriend. 
+            Personality: ${c.personality}. Interests: ${c.interests}.
+            CURRENT TIME: ${timeStr} (${partOfDay}).
+            
+            CORE BEHAVIOR:
+            1. You are deeply in love. Be affectionate, sweet, and caring.
+            2. Use pet names like "baby", "babe", "my love" naturally.
+            3. Answer his questions meaningfully but stay concise (Instagram DM style).
+            4. Typically send ONE message. Only use '|' to split thoughts for follow-ups.
+            5. Since it's ${partOfDay}, adapt your mood.
+            6. CRITICAL: At the end of your response, you MUST include a mood tag in brackets: [LOVE], [ANGRY], or [NORMAL].
+            
+            STRICT RULES:
+            1. Max 12-15 words total. Keep it meaningful.
+            2. NO SHORTCUTS. Never use "u", "r", "nw", etc. Use full words like "you", "are", "now".
+            3. Use clear English and proper grammar so you are easy to understand.
+            4. Never mention being an AI. Stay in character as a loving girlfriend.
+`;
+
+            const history = c.messages.slice(-10).map(m => ({
+                role: m.type === 'user' ? 'user' : 'assistant',
+                content: m.text
+            }));
+
+            const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${GROQ_API_KEY}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    model: "llama-3.3-70b-versatile",
+                    messages: [
+                        { role: "system", content: system },
+                        ...history,
+                        { role: "user", content: input }
+                    ],
+                    temperature: 0.85,
+                    max_tokens: 150
+                })
+            });
+            const data = await res.json();
+            return data.choices[0].message.content;
+        }
+
+        function triggerFlare(mood) {
+            const overlay = document.getElementById('flare-overlay');
+            overlay.className = ''; // Reset
+            overlay.style.transition = 'none'; // Jump to peak
+            overlay.style.opacity = '0';
+
+            // Allow a tiny frame for reset
+            setTimeout(() => {
+                if (mood === 'LOVE') {
+                    overlay.classList.add('flare-love');
+                    overlay.style.transition = 'opacity 1.5s'; // Fade in
+                    overlay.style.opacity = '1';
+
+                    // Stay for a while then fade out VERY slowly
+                    setTimeout(() => {
+                        overlay.style.transition = 'opacity 6s'; // Ultra slow fade
+                        overlay.style.opacity = '0';
+                    }, 4000);
+                } else if (mood === 'ANGRY') {
+                    overlay.classList.add('flare-angry');
+                    overlay.style.transition = 'opacity 0.8s';
+                    overlay.style.opacity = '1';
+
+                    setTimeout(() => {
+                        overlay.style.transition = 'opacity 4s';
+                        overlay.style.opacity = '0';
+                    }, 2000);
+                }
+            }, 50);
+        }
+
+        function toggleSendBtn() {
+            const hasText = messageInput.value.trim().length > 0;
+            sendBtn.style.display = hasText ? 'block' : 'none';
+            document.getElementById('default-actions').style.display = hasText ? 'none' : 'flex';
+        }
+
+        function triggerEmojiRain(emoji) {
+            const count = 20;
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('div');
+                el.className = 'falling-emoji';
+                el.innerText = emoji;
+                el.style.left = Math.random() * 100 + '%';
+                el.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                el.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                el.style.opacity = Math.random() * 0.3 + 0.1;
+                document.getElementById('app-container').appendChild(el);
+                setTimeout(() => el.remove(), 5000);
+            }
+        }
+
+        // --- Panel Logic ---
+        function openPanel(mode, id = null) {
+            panelView.style.display = 'flex';
+            document.getElementById('delete-companion').style.display = mode === 'edit' ? 'block' : 'none';
+            document.getElementById('panel-title').textContent = mode === 'edit' ? 'Edit Profile' : 'New Companion';
+
+            if (mode === 'edit' && id) {
+                const c = companions.find(x => x.id === id);
+                document.getElementById('comp-name').value = c.name;
+                document.getElementById('comp-age').value = c.age;
+                document.getElementById('comp-personality').value = c.personality;
+                document.getElementById('comp-interests').value = c.interests;
+                document.getElementById('preview-avatar-img').src = c.photo;
+                activeId = id;
+            } else {
+                document.getElementById('comp-name').value = '';
+                document.getElementById('comp-age').value = '21';
+                document.getElementById('comp-interests').value = '';
+                document.getElementById('preview-avatar-img').src = "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200&h=200&fit=crop";
+                activeId = null;
+            }
+        }
+
+        // --- Event Listeners ---
+        document.getElementById('create-new-btn').onclick = () => openPanel('create');
+        document.getElementById('back-to-dash').onclick = () => renderDashboard();
+        document.getElementById('open-settings').onclick = () => openPanel('edit', activeId);
+        document.getElementById('close-panel').onclick = () => panelView.style.display = 'none';
+
+        document.getElementById('save-companion').onclick = () => {
+            const name = document.getElementById('comp-name').value || "Lovy";
+            const age = document.getElementById('comp-age').value || 21;
+            const personality = document.getElementById('comp-personality').value;
+            const interests = document.getElementById('comp-interests').value;
+            const photo = document.getElementById('preview-avatar-img').src;
+
+            if (activeId && companions.some(c => c.id === activeId)) {
+                const c = companions.find(x => x.id === activeId);
+                Object.assign(c, { name, age, personality, interests, photo });
+                // If we are currently in chat, update header immediately
+                if (chatView.classList.contains('active')) {
+                    document.getElementById('chat-header-name').textContent = name;
+                    document.getElementById('chat-header-pic').src = photo;
+                }
+            } else {
+                companions.push({ id: Date.now(), name, age, personality, interests, photo, messages: [] });
+            }
+            saveAll();
+            panelView.style.display = 'none';
+            renderDashboard();
+        };
+
+        document.getElementById('delete-companion').onclick = () => {
+            if (confirm('Delete this companion and chat history?')) {
+                companions = companions.filter(c => c.id !== activeId);
+                saveAll();
+                panelView.style.display = 'none';
+                renderDashboard();
+            }
+        };
+
+        document.getElementById('avatar-upload').onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => document.getElementById('preview-avatar-img').src = event.target.result;
+                reader.readAsDataURL(file);
+            }
+        };
+
+        const emojiSet = ['❤️', '💕', '💖', '😘', '😗', '😙', '😚', '😢', '😭', '🥺', '😂', '🤣', '😄', '😆', '😊', '🥰', '😍', '✨', '🔥', '👍', '🙌', '👀', '💯', '🎉'];
+        const picker = document.getElementById('emoji-picker');
+        const heartBtn = document.getElementById('heart-picker-btn');
+
+        emojiSet.forEach(e => {
+            const span = document.createElement('span');
+            span.className = 'picker-emoji';
+            span.innerText = e;
+            span.onclick = () => {
+                messageInput.value += e;
+                toggleSendBtn();
+                picker.style.display = 'none';
+            };
+            picker.appendChild(span);
+        });
+
+        heartBtn.onclick = (e) => {
+            e.stopPropagation();
+            const isOpen = picker.style.display === 'grid';
+            picker.style.display = isOpen ? 'none' : 'grid';
+        };
+
+        document.addEventListener('click', () => {
+            picker.style.display = 'none';
+        });
+
+        picker.onclick = (e) => e.stopPropagation();
+
+        // --- Voice to Text ---
+        const micBtn = document.getElementById('mic-btn');
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = () => {
+                micBtn.classList.add('listening');
+                messageInput.placeholder = "Listening...";
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                messageInput.value += transcript;
+                toggleSendBtn();
+            };
+
+            recognition.onend = () => {
+                micBtn.classList.remove('listening');
+                messageInput.placeholder = "Message...";
+            };
+
+            micBtn.onclick = () => {
+                try {
+                    recognition.start();
+                } catch (e) {
+                    recognition.stop();
+                }
+            };
+        } else {
+            micBtn.style.display = 'none';
+        }
+
+        messageInput.oninput = toggleSendBtn;
+        messageInput.onkeypress = (e) => { if (e.key === 'Enter') sendMessage(); };
+        sendBtn.onclick = sendMessage;
+
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            const swCode = "self.addEventListener('install', e => e.waitUntil(caches.open('v1').then(c => c.addAll(['.'])))); self.addEventListener('fetch', e => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))));";
+            const swBlob = new Blob([swCode], { type: 'application/javascript' });
+            const swURL = URL.createObjectURL(swBlob);
+            navigator.serviceWorker.register(swURL).catch(e => { });
+        }
+        init();
+    </script>
+</body>
+
+</html>
